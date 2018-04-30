@@ -1,0 +1,74 @@
+{
+  "name": "@5calls/react-components",
+  "version": "0.0.1",
+  "description": "React component library for 5 Calls webapp",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/5calls/react-components.git"
+  },
+  "keywords": [
+    "politics",
+    "civic",
+    "civic-tech",
+    "5calls",
+    "react",
+    "react-components",
+    "typescript"
+  ],
+  "author": "5 Calls team <make5calls@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/5calls/react-components/issues"
+  },
+  "homepage": "https://github.com/5calls/react-components#readme",
+  "files": [
+    "lib"
+  ],
+  "peerDependencies": {
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2"
+  },
+  "devDependencies": {
+    "@types/enzyme": "^3.1.10",
+    "@types/jest": "^22.2.3",
+    "@types/react": "^16.3.13",
+    "@types/react-dom": "^16.0.5",
+    "enzyme": "^3.3.0",
+    "enzyme-to-json": "^3.3.3",
+    "jest": "^22.4.3",
+    "ts-jest": "^22.4.4",
+    "ts-loader": "^4.2.0",
+    "typescript": "^2.8.3"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.ts?(x)",
+      "<rootDir>/src/**/?(*.)(spec|test).ts?(x)"
+    ],
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tssx)$"
+    ]
+  },
+  "dependencies": {}
+}
