@@ -1,6 +1,6 @@
 {
   "name": "@5calls/react-components",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "React component library for 5 Calls webapp",
   "main": "lib/index.js",
   "scripts": {
