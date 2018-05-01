@@ -10,3 +10,9 @@ export interface UserProfile {
   picture: string; // a url for the users' photo
 }
 
+export interface AuthProvider {
+  login: () => void;
+  isLoggedIn: () => boolean;
+  logout: () => void;
+  checkAndRenewSession: (profile?: UserProfile) => void;
+}

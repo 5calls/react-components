@@ -1,49 +1,41 @@
 import * as React from 'react';
-import { UserProfile } from '../shared/model';
-// import { loginStyles } from '../shared/styles';
+import { UserProfile, AuthProvider } from '../shared/model';
+import { LoginUi } from './LoginUi';
+import { Auth0LoginService } from '../service/Auth0LoginService';
 
 interface Props {
-  readonly profile?: UserProfile;
-  readonly login: () => void;
+  authProvider?: AuthProvider;
 }
 
 interface State {
-  userMenuHidden: boolean;
 }
 
 export class Login extends React.Component<Props, State> {
+  authProvider: AuthProvider = new Auth0LoginService();
+  // userProfile: UserProfile | undefined = undefined;
+  userProfile: UserProfile | undefined = {name: 'Craig', sub: '', exp: 0, picture: ''};
 
   constructor(props: Props) {
     super(props);
-
-    this.state = {
-      userMenuHidden: true
-    };
   }
 
-  toggleMenu = (): void => {
-    this.setState({ userMenuHidden: !this.state.userMenuHidden });
-  }
-
-  loginClick = (): void => {
-    if (this.props.profile) {
-      this.props.login();
-    } else {
-      this.toggleMenu();
+  componentDidMount() {
+    if(this.props.authProvider) {
+      this.authProvider = this.props.authProvider;
     }
+  }
+
+  login = () => {
+    this.authProvider.login();
   }
 
   render() {
     return (
-      <div style={{position: 'absolute', right:'0'}}>
-        <a onClick={this.loginClick}>
-          <img
-            style={{cursor: 'pointer', width: '100px', height: '40px'}}
-            src={this.props.profile ? this.props.profile.picture : '/img/5calls-stars.png'}
-            alt="Login"
-          />
-        </a>
+      <div>
+        <LoginUi
+          profile={this.userProfile}
+          login={this.login}/>
       </div>
-    );
-  };
+    )
+  }
 }
