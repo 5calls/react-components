@@ -34,7 +34,8 @@ export class Auth0LoginService implements AuthProvider {
   }
 
   logout = () => {
-
+    // This needs to be done in the app:
+    //   store.dispatch(clearProfileActionCreator());
   }
 
   handleAuthentication = (): AuthResponse => {

@@ -5,6 +5,7 @@ import { Auth0LoginService } from '../service/Auth0LoginService';
 
 interface Props {
   handleAuthResponse: (authResponse: AuthResponse) => void;
+  logout: () => void;
   authProvider?: AuthProvider;
 }
 

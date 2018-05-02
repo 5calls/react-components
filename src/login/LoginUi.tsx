@@ -1,10 +1,12 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import { UserProfile } from '../shared/model';
 // import { loginStyles } from '../shared/styles';
 
 interface Props {
   readonly profile?: UserProfile;
   readonly login: () => void;
+  readonly logout: () => void;
 }
 
 interface State {
@@ -37,17 +39,32 @@ export class LoginUi extends React.Component<Props, State> {
     }
   }
 
+  logout = (): void => {
+    this.props.logout();
+    this.toggleMenu();
+  }
+
   render() {
     return (
-      <div style={{position: 'absolute', right:'0', width: '100px', height: '40px'}}>
-        <a onClick={this.loginClick}>
-          <img
-            style={{cursor: 'pointer', width: '35px', height: '35px'}}
-            src={this.props.profile ? this.props.profile.picture : '/img/5calls-stars.png'}
-            alt="Login"
-          />
-        </a>
+      <div className="userHeader">
+      <a onClick={this.loginClick}>
+        <img
+          className="stars"
+          src={this.props.profile ? this.props.profile.picture : '/img/5calls-stars.png'}
+          alt="Make your voice heard"
+        />
+      </a>
+      <p><a onClick={this.loginClick}>{this.props.profile ? this.props.profile.name : 'Login'}</a></p>
+      { !this.state.userMenuHidden &&
+      <div className="userHeader__menu">
+        <ul>
+          <li><Link to="/impact">My Impact</Link></li>
+          <li className="line"/>
+          <li><a href="#" onClick={this.logout}><strong>Log out</strong></a></li>
+        </ul>
       </div>
-    );
+      }
+    </div>
+  );
   };
 }

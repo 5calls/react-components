@@ -5,6 +5,7 @@ import { Auth0LoginService } from '../service/Auth0LoginService';
 
 interface Props {
   authProvider?: AuthProvider;
+  logout: () => void;
 }
 
 interface State {
@@ -29,12 +30,19 @@ export class Login extends React.Component<Props, State> {
     this.authProvider.login();
   }
 
+  logout = () => {
+    this.props.logout();
+    // This needs to be done in the callback:
+    //   store.dispatch(clearProfileActionCreator());
+  }
+
   render() {
     return (
       <div>
         <LoginUi
           profile={this.userProfile}
-          login={this.login}/>
+          login={this.login}
+          logout={this.logout} />
       </div>
     )
   }
