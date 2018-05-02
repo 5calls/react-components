@@ -14,5 +14,11 @@ export interface AuthProvider {
   login: () => void;
   isLoggedIn: () => boolean;
   logout: () => void;
-  checkAndRenewSession: (profile?: UserProfile) => void;
+  handleAuthentication: () => AuthResponse;
+  // checkAndRenewSession: (profile?: UserProfile) => void;
+}
+
+export interface AuthResponse {
+  authToken: string;
+  userProfile: UserProfile | undefined;
 }

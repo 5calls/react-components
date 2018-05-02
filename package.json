@@ -31,13 +31,17 @@
   ],
   "peerDependencies": {
     "react": "^16.3.2",
-    "react-dom": "^16.3.2"
+    "react-dom": "^16.3.2",
+    "react-router": "^4.2.0"
   },
   "devDependencies": {
+    "@types/auth0-js": "^8.11.2",
     "@types/enzyme": "^3.1.10",
     "@types/jest": "^22.2.3",
+    "@types/jwt-decode": "^2.2.1",
     "@types/react": "^16.3.13",
     "@types/react-dom": "^16.0.5",
+    "@types/react-router": "^4.0.24",
     "enzyme": "^3.3.0",
     "enzyme-to-json": "^3.3.3",
     "jest": "^22.4.3",
@@ -70,5 +74,8 @@
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tssx)$"
     ]
   },
-  "dependencies": {}
+  "dependencies": {
+    "auth0-js": "^9.5.1",
+    "jwt-decode": "^2.2.0"
+  }
 }
