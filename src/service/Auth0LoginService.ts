@@ -19,7 +19,7 @@ export class Auth0LoginService implements AuthProvider {
     domain: Constants.AUTH0_DOMAIN,
     clientID: Constants.AUTH0_CLIENT_ID,
     redirectUri: callbackURI(),
-    audience: 'https://5calls.auth0.com/userinfo',
+    audience: 'https://5callsos.auth0.com/userinfo',
     responseType: 'token id_token',
     scope: 'openid profile email',
   });
@@ -38,16 +38,20 @@ export class Auth0LoginService implements AuthProvider {
     //   store.dispatch(clearProfileActionCreator());
   }
 
-  handleAuthentication = (): AuthResponse => {
-    let authResponse: AuthResponse = {} as AuthResponse;
-    this.auth0.parseHash((err, authResult) => {
-      if (authResult === undefined) {
-        console.log('error with auth', err);
-      } else {
-        authResponse = this.decodeAndSetProfile(authResult);
-      }
+  handleAuthentication = (): Promise<AuthResponse> => {
+    return new Promise((resolve, reject) => {
+      this.auth0.parseHash((error, authResult) => {
+        if (authResult) {
+        // if (!authResult) {
+        //   console.error('Error with Auth0.parseHash() call', error);
+        //   reject(error);
+        // } else {
+          console.log('Auth0LoginService.handleAuthentication() authResult', authResult);
+          const authResponse = this.decodeAndSetProfile(authResult);
+          resolve(authResponse);
+        }
+      });
     });
-    return authResponse;
   }
 
   decodeAndSetProfile = (auth0Hash: auth0base.Auth0DecodedHash): AuthResponse => {

@@ -11,9 +11,11 @@ export const CONTACTS_API_URL = `${API_URL}/contacts`;
 export const IP_INFO_URL = 'https://ipinfo.io/json';
 export const DONATE_URL = 'https://secure.actblue.com/donate/5calls-donate';
 
-export const AUTH0_CLIENT_ID = 'r7qwuQFK92AcQyA2Hav4BrbDk0meignU';
-export const AUTH0_CLIENT_SECRET = 'XXO7TPUq_j1Hql8Lqevad6xZP1Ln3oPuFZDjmURGlNd4NxjZ5tRSt-LoZbtjIMkd';
-export const AUTH0_DOMAIN = '5calls.auth0.com';
+export const AUTH0_CLIENT_ID = 'bVxfNRGD4azuJLWPDPHNNsfMElENPKjF';
+export const AUTH0_CLIENT_SECRET = '3MGWBSsG56ml2euRwvihwsrF-soS6SKi4WOPcbL2uh7rqMj6ig2-0gG4Q_Ha4vrX';
+// export const AUTH0_CLIENT_ID = 'r7qwuQFK92AcQyA2Hav4BrbDk0meignU';
+// export const AUTH0_CLIENT_SECRET = 'XXO7TPUq_j1Hql8Lqevad6xZP1Ln3oPuFZDjmURGlNd4NxjZ5tRSt-LoZbtjIMkd';
+export const AUTH0_DOMAIN = '5callsos.auth0.com';
 
 export const cacheTimeout = {
   default:  24 * 60 * 60 * 1000, // 1 day
