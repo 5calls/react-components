@@ -50,6 +50,18 @@ export class Auth0LoginService implements AuthProvider {
     return authResponse;
   }
 
+  decodeAndSetProfile = (auth0Hash: auth0base.Auth0DecodedHash): AuthResponse => {
+    let userProfile: UserProfile | undefined;
+    let authToken = '';
+    if (auth0Hash.idToken) {
+      authToken = auth0Hash.idToken;
+      console.log('token is ', authToken);
+      userProfile = jwt(authToken);
+      console.log('jwt decodes auth token to', userProfile);
+    }
+    return {authToken, userProfile};
+  }
+
   isLoggedIn = (): boolean => {
     // normally we'd just check the state and see if we're logged in
     // but this runs before stuff is rehydrated, and waiting to rehydrate is not cool
@@ -60,20 +72,6 @@ export class Auth0LoginService implements AuthProvider {
       return true;
     }
     return false;
-  }
-
-  decodeAndSetProfile = (auth0Hash: auth0base.Auth0DecodedHash): AuthResponse => {
-    let userProfile: UserProfile | undefined;
-    let authToken = '';
-    if (auth0Hash.idToken) {
-      authToken = auth0Hash.idToken;
-      console.log('token is ', authToken);
-      userProfile = jwt(authToken);
-      console.log('jwt decodes auth token to', userProfile);
-    }
-
-    return {authToken, userProfile};
-
   }
 
   checkAndRenewSession = (profile?: UserProfile): AuthResponse | undefined => {

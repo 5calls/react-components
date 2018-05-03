@@ -22,7 +22,6 @@ export class LoginUi extends React.Component<Props, State> {
     this.state = {
       userMenuHidden: true,
       isLoggedIn: false
-
     };
   }
 
@@ -30,12 +29,19 @@ export class LoginUi extends React.Component<Props, State> {
     this.setState({ userMenuHidden: !this.state.userMenuHidden });
   }
 
+  // loginClick = () => {
+  //   if (this.props.currentUser && this.props.currentUser.profile) {
+  //     this.toggleMenu();
+  //   } else {
+  //     authutil.login();
+  //   }
+  // }
   loginClick = (): void => {
     if (this.props.profile) {
+      this.toggleMenu();
+    } else {
       this.props.login();
       this.setState({isLoggedIn: true});
-    } else {
-      this.toggleMenu();
     }
   }
 
@@ -46,24 +52,24 @@ export class LoginUi extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className="userHeader">
-      <a onClick={this.loginClick}>
-        <img
-          className="stars"
-          src={this.props.profile ? this.props.profile.picture : '/img/5calls-stars.png'}
-          alt="Make your voice heard"
-        />
-      </a>
-      <p><a onClick={this.loginClick}>{this.props.profile ? this.props.profile.name : 'Login'}</a></p>
-      { !this.state.userMenuHidden &&
-      <div className="userHeader__menu">
-        <ul>
-          <li><Link to="/impact">My Impact</Link></li>
-          <li className="line"/>
-          <li><a href="#" onClick={this.logout}><strong>Log out</strong></a></li>
-        </ul>
-      </div>
-      }
+        <div className="userHeader">
+        <a onClick={this.loginClick}>
+          <img
+            className="stars"
+            src={this.props.profile ? this.props.profile.picture : '/img/5calls-stars.png'}
+            alt="Make your voice heard"
+          />
+        </a>
+        <p><a onClick={this.loginClick}>{this.props.profile ? this.props.profile.name : 'Login'}</a></p>
+        { !this.state.userMenuHidden &&
+        <div className="userHeader__menu">
+          <ul>
+            <li><Link to="/impact">My Impact</Link></li>
+            <li className="line"/>
+            <li><a href="#" onClick={this.logout}><strong>Log out</strong></a></li>
+          </ul>
+        </div>
+        }
     </div>
   );
   };

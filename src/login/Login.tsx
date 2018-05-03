@@ -5,6 +5,7 @@ import { Auth0LoginService } from '../service/Auth0LoginService';
 
 interface Props {
   authProvider?: AuthProvider;
+  userProfile: UserProfile;
   logout: () => void;
 }
 
@@ -13,8 +14,6 @@ interface State {
 
 export class Login extends React.Component<Props, State> {
   authProvider: AuthProvider = new Auth0LoginService();
-  // userProfile: UserProfile | undefined = undefined;
-  userProfile: UserProfile | undefined = {name: 'Craig', sub: '', exp: 0, picture: ''};
 
   constructor(props: Props) {
     super(props);
@@ -40,7 +39,7 @@ export class Login extends React.Component<Props, State> {
     return (
       <div>
         <LoginUi
-          profile={this.userProfile}
+          profile={this.props.userProfile}
           login={this.login}
           logout={this.logout} />
       </div>
