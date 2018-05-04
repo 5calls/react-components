@@ -4,10 +4,8 @@ import { AuthResponse, AuthProvider } from '../shared/model';
 import { Auth0LoginService } from '../service/Auth0LoginService';
 
 interface Props {
-  handleAuthResponse: (authResponse: Promise<AuthResponse>) => void;
-  logout: () => void;
+  handleAuthResponse: (authResponse: AuthResponse) => void;
   authProvider?: AuthProvider;
-  render?: () => void;
 }
 
 interface State {
@@ -34,19 +32,15 @@ export class AuthCallback extends React.Component<Props, State> {
     if (this.props.authProvider) {
       this.authProvider = this.props.authProvider;
     }
-    const response: Promise<AuthResponse> = this.authProvider.handleAuthentication();
+    const response: AuthResponse = this.authProvider.handleAuthentication();
     this.props.handleAuthResponse(response);
   }
 
   render() {
-    if (this.props.render) {
-      this.props.render();
+    if (this.state.doneRedirect) {
+      return <Redirect to="/"/>;
     } else {
-      if (this.state.doneRedirect) {
-        return <Redirect to="/"/>;
-      } else {
-        return <h1>Logging you in...</h1>;
-      }
-  }
+      return <h1>Logging you in...</h1>;
+    }
   }
 }

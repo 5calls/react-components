@@ -38,20 +38,16 @@ export class Auth0LoginService implements AuthProvider {
     //   store.dispatch(clearProfileActionCreator());
   }
 
-  handleAuthentication = (): Promise<AuthResponse> => {
-    return new Promise((resolve, reject) => {
-      this.auth0.parseHash((error, authResult) => {
-        if (authResult) {
-        // if (!authResult) {
-        //   console.error('Error with Auth0.parseHash() call', error);
-        //   reject(error);
-        // } else {
-          console.log('Auth0LoginService.handleAuthentication() authResult', authResult);
-          const authResponse = this.decodeAndSetProfile(authResult);
-          resolve(authResponse);
-        }
-      });
+  handleAuthentication = (): AuthResponse => {
+    let authResponse: AuthResponse = {} as AuthResponse;
+    this.auth0.parseHash((error, authResult) => {
+      if (!authResult) {
+        console.log('Error with auth in Auth0LoginService.handleAuthentication',  error);
+      } else {
+        authResponse = this.decodeAndSetProfile(authResult);
+      }
     });
+    return authResponse;
   }
 
   decodeAndSetProfile = (auth0Hash: auth0base.Auth0DecodedHash): AuthResponse => {
@@ -80,7 +76,7 @@ export class Auth0LoginService implements AuthProvider {
 
   checkAndRenewSession = (profile?: UserProfile): AuthResponse | undefined => {
     let authResponse: AuthResponse | undefined = undefined;
-    if (profile !== undefined) {
+    if (profile) {
       // only act on people who are logged in
       let expires = new Date(profile.exp * 1000);
       let now = new Date();

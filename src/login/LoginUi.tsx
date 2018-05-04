@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { UserProfile } from '../shared/model';
-// import { loginStyles } from '../shared/styles';
 
 interface Props {
   readonly profile?: UserProfile;
@@ -29,13 +28,6 @@ export class LoginUi extends React.Component<Props, State> {
     this.setState({ userMenuHidden: !this.state.userMenuHidden });
   }
 
-  // loginClick = () => {
-  //   if (this.props.currentUser && this.props.currentUser.profile) {
-  //     this.toggleMenu();
-  //   } else {
-  //     authutil.login();
-  //   }
-  // }
   loginClick = (): void => {
     if (this.props.profile) {
       this.toggleMenu();
