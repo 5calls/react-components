@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { UserProfile, AuthProvider } from '../shared/model';
+import { UserProfile } from '../shared/model';
 import { LoginUi } from './LoginUi';
 
 interface Props {
-  authProvider?: AuthProvider;
   userProfile: UserProfile;
   logout: () => void;
   login: () => void;

@@ -9,16 +9,3 @@ export interface UserProfile {
   exp: number;
   picture: string; // a url for the users' photo
 }
-
-export interface AuthProvider {
-  login: () => void;
-  isLoggedIn: () => boolean;
-  logout: () => void;
-  handleAuthentication: () => AuthResponse;
-  checkAndRenewSession: (profile?: UserProfile) => void;
-}
-
-export interface AuthResponse {
-  authToken: string;
-  userProfile: UserProfile | undefined;
-}
