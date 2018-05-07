@@ -10,7 +10,6 @@ interface Props {
 
 interface State {
   userMenuHidden: boolean;
-  isLoggedIn: boolean;
 }
 
 export class LoginUi extends React.Component<Props, State> {
@@ -20,7 +19,6 @@ export class LoginUi extends React.Component<Props, State> {
 
     this.state = {
       userMenuHidden: true,
-      isLoggedIn: false
     };
   }
 
@@ -33,7 +31,6 @@ export class LoginUi extends React.Component<Props, State> {
       this.toggleMenu();
     } else {
       this.props.login();
-      this.setState({isLoggedIn: true});
     }
   }
 

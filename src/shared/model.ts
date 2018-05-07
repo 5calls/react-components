@@ -14,7 +14,7 @@ export interface AuthProvider {
   isLoggedIn: () => boolean;
   logout: () => void;
   handleAuthentication: () => AuthResponse | Promise<AuthResponse>;
-  // checkAndRenewSession: (profile?: UserProfile) => void;
+  checkAndRenewSession: (profile?: UserProfile) => void;
 }
 
 export interface AuthResponse {

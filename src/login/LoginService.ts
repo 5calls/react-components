@@ -2,12 +2,7 @@ import * as auth0base from 'auth0-js';
 import jwt from 'jwt-decode';
 
 import * as Constants from '../shared/constants';
-// import { UserProfile, setProfileActionCreator, UserState } from '../../redux/userState';
 import { UserState, UserProfile, AuthResponse } from '../shared/model';
-// import { store } from '../../redux/store';
-// import { clearProfileActionCreator, setAuthTokenActionCreator } from '../../redux/userState/action';
-// import { uploadStatsIfNeeded } from '../../redux/remoteData/asyncActionCreator';
-// import { queueUntilRehydration } from '../../redux/rehydrationUtil';
 
 const callbackURI = () => {
   if (window.location.host.includes('localhost')) {
@@ -46,8 +41,8 @@ export class LoginService {
           if (error !== null) {
             // not sure how this might happen, log out for now
             // tslint:disable-next-line:no-console
-            console.error('error check session', error);
-            this.logout();
+            console.error('LoginService.checkAndRenewSession() error: ', error);
+            // this.logout(); //FIXME: this.logout() is a noop
           } else {
             // otherwise we get the refreshed details back and update them
             this.decodeAndSetProfile(result);
@@ -71,8 +66,8 @@ export class LoginService {
   }
 
   logout() {
-    // TODO: in caller of this function (or elsewhere):
-    // store.dispatch(clearProfileActionCreator());
+    // The component using this service should handle
+    // clearing the user profile from the Redux state
   }
 
   handleAuthentication(): Promise<AuthResponse> {
@@ -101,12 +96,5 @@ export class LoginService {
       // console.log('jwt decodes to', profile);
     }
     return {authToken, userProfile };
-    // TODO in caller of this function:
-    // store.dispatch(setAuthTokenActionCreator(auth0Hash.idToken));
-    // store.dispatch(setProfileActionCreator(profile));
-    // check for unuploaded stats
-    // queueUntilRehydration(() => {
-    //   store.dispatch(uploadStatsIfNeeded());
-    // });
   }
 }
