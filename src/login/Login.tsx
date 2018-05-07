@@ -1,28 +1,29 @@
 import * as React from 'react';
 import { UserProfile } from '../shared/model';
 import { LoginUi } from './LoginUi';
+import { LoginService } from './LoginService';
 
 interface Props {
   userProfile: UserProfile;
-  logout: () => void;
-  login: () => void;
+  logoutHandler: () => void;
 }
 
 interface State {
 }
 
 export class Login extends React.Component<Props, State> {
+  loginService = new LoginService();
 
   constructor(props: Props) {
     super(props);
   }
 
   login = () => {
-    this.props.login();
+    this.loginService.login();
   }
 
   logout = () => {
-    this.props.logout();
+    this.props.logoutHandler();
   }
 
   render() {
