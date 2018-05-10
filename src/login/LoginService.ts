@@ -61,8 +61,35 @@ export class LoginService {
     return false;
   }
 
-  login() {
-    this.auth0.authorize();
+  login(username?: string, password?: string) {
+    // this.auth0.authorize();
+    username = username || '';
+    password = password || '';
+    let results: string | undefined = undefined;
+    this.auth0.login(
+      { realm: 'Username-Password-Authentication', username, password },
+      (error:  auth0base.Auth0Error | null) => {
+        // const err: auth0base.Auth0Error = null;
+        console.error('Auth0 LoginService.login() error', error)
+        if (error) {
+          results = error.errorDescription;
+        }
+      }
+    );
+    return results;
+  }
+
+  twitterLogin = () => {
+    this.auth0.authorize({
+      connection: 'twitter', // use connection identifier
+
+    });
+  }
+
+  facebookLogin = () => {
+    this.auth0.authorize({
+      connection: 'facebook' // use connection identifier
+    });
   }
 
   logout() {
@@ -79,6 +106,7 @@ export class LoginService {
           reject(error);
         } else {
           const authResponse: AuthResponse = this.decodeAndSetProfile(authResult);
+          console.log('LoginService.handleAuthentication called. Auth response', authResponse);
           resolve(authResponse);
         }
       });
@@ -98,3 +126,22 @@ export class LoginService {
     return {authToken, userProfile };
   }
 }
+
+// $('.signin-db').on('click', function() {
+//   webAuth.login({
+//     realm: 'tests',
+//     username: 'testuser',
+//     password: 'testpass',
+//   });
+// });
+// // Parse the authentication result
+// webAuth.parseHash((err, authResult) => {
+//   if (authResult) {
+//     // Save the tokens from the authResult in local storage or a cookie
+//     localStorage.setItem('access_token', authResult.accessToken);
+//     localStorage.setItem('id_token', authResult.idToken);
+//   } else if (err) {
+//     // Handle errors
+//     console.log(err);
+//   }
+// });
