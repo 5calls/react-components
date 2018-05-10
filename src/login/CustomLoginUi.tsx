@@ -5,7 +5,10 @@ import { LoginService } from './LoginService';
 
 interface Props{
   readonly profile?: UserProfile;
-  logoutHandler: () => void;
+  login: (email?: string, password?: string) => string | undefined;
+  twitterLogin: () => void;
+  facebookLogin: () => void;
+  logout: () => void;
 };
 
 interface State{
@@ -26,7 +29,7 @@ export class CustomLoginUi extends React.Component<Props, State> {
       password: '',
       errorMessage: '',
       shouldDisplayLoginModal: false,
-      userMenuHidden: true
+      userMenuHidden: true,
     }
   }
 
@@ -35,27 +38,33 @@ export class CustomLoginUi extends React.Component<Props, State> {
   }
 
   login = () => {
-    const results = this.loginService.login(this.state.email, this.state.password);
-    if (results) {
-      this.setState({errorMessage: results});
+    const results = this.props.login(this.state.email, this.state.password);
+    this.setLoginState(results);
+  }
+
+  twitterLogin = () => {
+    this.props.twitterLogin();
+    this.setLoginState();
+  }
+
+  facebookLogin = () => {
+    this.props.facebookLogin();
+    this.setLoginState();
+  }
+
+  setLoginState = (loginResults?: string) => {
+    if (loginResults) {
+      this.setState({errorMessage: loginResults});
     } else {
-      this.setState({shouldDisplayLoginModal: false});
+      this.setState({
+        shouldDisplayLoginModal: false,
+      });
     }
   }
 
   logout = (): void => {
-    this.props.logoutHandler();
+    this.props.logout();
     this.toggleMenu();
-  }
-
-  twitterLogin = () => {
-    this.loginService.twitterLogin();
-    this.setState({shouldDisplayLoginModal: false});
-  }
-
-  facebookLogin = () => {
-    this.loginService.facebookLogin();
-    this.setState({shouldDisplayLoginModal: false});
   }
 
   showLoginModal = () => {
@@ -109,15 +118,14 @@ export class CustomLoginUi extends React.Component<Props, State> {
                 Log In
             </button>
           </div>
-          <div className="btn-block">
+          {/* <div className="btn-block">
             <button
               type="button"
               id="btn-signup"
               className="">
                 Sign Up
             </button>
-          </div>
-          <hr/>
+          </div> */}
           <div className="btn-block">
             <button
               type="button"
