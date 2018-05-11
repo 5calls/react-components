@@ -1,33 +1,26 @@
 import * as auth0base from 'auth0-js';
 import jwt from 'jwt-decode';
+import { UserState, UserProfile, AuthResponse, Auth0Config } from '../shared/model';
 
-import * as Constants from '../shared/constants';
-import { UserState, UserProfile, AuthResponse } from '../shared/model';
-
-const callbackURI = () => {
-  if (window.location.host.includes('localhost')) {
-    return 'http://localhost:3000/auth0callback';
-  } else if (window.location.host.includes('test.5calls.org')) {
-    return 'https://test.5calls.org/auth0callback';
-  }
-
-  return 'https://5calls.org/auth0callback';
-};
+const databaseConnection = 'Username-Password-Authentication';
 
 export class LoginService {
-  auth0 = new auth0base.WebAuth({
-    domain: Constants.AUTH0_DOMAIN,
-    clientID: Constants.AUTH0_CLIENT_ID,
-    redirectUri: callbackURI(),
-    audience: 'https://5callsos.auth0.com/userinfo',
-    responseType: 'token id_token',
-    scope: 'openid profile email',
-  });
 
-  constructor() {
+  auth0: auth0base.WebAuth;
+
+  constructor(auth0Config: Auth0Config) {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
+
+    this.auth0 = new auth0base.WebAuth({
+      domain: auth0Config.domain,
+      clientID: auth0Config.clientId,
+      redirectUri: auth0Config.callbackUri,
+      audience: auth0Config.audience,
+      responseType: 'token id_token',
+      scope: 'openid profile email',
+    });
   }
 
   checkAndRenewSession(profile?: UserProfile) {
@@ -61,16 +54,32 @@ export class LoginService {
     return false;
   }
 
+  signup = (username?: string, password?: string): string | undefined => {
+    username = username || '';
+    password = password || '';
+    let results: string | undefined = undefined;
+
+    this.auth0.redirect.signupAndLogin({
+      connection: databaseConnection,
+      email: username,
+      password: password
+    }, (error:  auth0base.Auth0Error | null) => {
+      if (error) {
+        console.error('Auth0 LoginService.signup() error', error);
+        results = error.description;
+      };
+    });
+    return results;
+  }
+
   login(username?: string, password?: string): string | undefined {
-    // this.auth0.authorize();
     username = username || '';
     password = password || '';
     let results: string | undefined = undefined;
     this.auth0.login(
-      { realm: 'Username-Password-Authentication', username, password },
+      { realm: databaseConnection, username, password },
       (error:  auth0base.Auth0Error | null) => {
-        // const err: auth0base.Auth0Error = null;
-        console.error('Auth0 LoginService.login() error', error)
+        console.error('Auth0 LoginService.login() error', error);
         if (error) {
           results = error.description;
         }
@@ -119,29 +128,8 @@ export class LoginService {
     let authToken = '';
     if (auth0Hash.idToken) {
       authToken = auth0Hash.idToken;
-      // console.log('token is ', auth0Hash.idToken);
       userProfile = jwt(auth0Hash.idToken);
-      // console.log('jwt decodes to', profile);
     }
     return {authToken, userProfile };
   }
 }
-
-// $('.signin-db').on('click', function() {
-//   webAuth.login({
-//     realm: 'tests',
-//     username: 'testuser',
-//     password: 'testpass',
-//   });
-// });
-// // Parse the authentication result
-// webAuth.parseHash((err, authResult) => {
-//   if (authResult) {
-//     // Save the tokens from the authResult in local storage or a cookie
-//     localStorage.setItem('access_token', authResult.accessToken);
-//     localStorage.setItem('id_token', authResult.idToken);
-//   } else if (err) {
-//     // Handle errors
-//     console.log(err);
-//   }
-// });

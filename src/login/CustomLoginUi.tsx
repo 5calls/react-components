@@ -9,6 +9,7 @@ interface Props{
   twitterLogin: () => void;
   facebookLogin: () => void;
   logout: () => void;
+  signup: (email?: string, password?: string) => string | undefined;
 };
 
 interface State{
@@ -20,7 +21,6 @@ interface State{
 };
 
 export class CustomLoginUi extends React.Component<Props, State> {
-  loginService = new LoginService();
 
   constructor(props: Props) {
     super(props);
@@ -35,6 +35,17 @@ export class CustomLoginUi extends React.Component<Props, State> {
 
   toggleMenu = (): void => {
     this.setState({ userMenuHidden: !this.state.userMenuHidden });
+  }
+
+  signup = () => {
+    const email = this.state.email;
+    const password = this.state.password;
+    if (!email || !password) {
+      this.setState({errorMessage: 'Email and password is required'})
+    } else {
+      const results = this.props.signup(this.state.email, this.state.password);
+      this.setLoginState(results);
+    }
   }
 
   login = () => {
@@ -125,14 +136,14 @@ export class CustomLoginUi extends React.Component<Props, State> {
                 Log In
             </button>
           </div>
-          {/* <div className="btn-block">
+          <div className="btn-block">
             <button
               type="button"
               id="btn-signup"
-              className="">
+              className="login-button">
                 Sign Up
             </button>
-          </div> */}
+          </div>
           <div className="btn-block">
             <button
               type="button"

@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { UserProfile } from '../shared/model';
+import { UserProfile, Auth0Config } from '../shared/model';
 import { CustomLoginUi } from './CustomLoginUi';
 import { LoginService } from './LoginService';
 
 interface Props {
-  userProfile: UserProfile;
+  readonly auth0Config: Auth0Config;
+  readonly userProfile: UserProfile;
   logoutHandler: () => void;
 }
 
@@ -12,10 +13,17 @@ interface State {
 }
 
 export class CustomLogin extends React.Component<Props, State> {
-  loginService = new LoginService();
+  loginService: LoginService;
 
   constructor(props: Props) {
     super(props);
+    this.loginService = new LoginService(this.props.auth0Config);
+  }
+
+  signup = (email?: string, password?: string): string | undefined => {
+    const results = this.loginService.signup(email, password);
+    console.log('Signup results', results);
+    return results;
   }
 
   login = (email?: string, password?: string): string | undefined => {
@@ -44,7 +52,8 @@ export class CustomLogin extends React.Component<Props, State> {
           login={this.login}
           twitterLogin={this.twitterLogin}
           facebookLogin={this.facebookLogin}
-          logout={this.logout} />
+          logout={this.logout}
+          signup={this.signup}/>
       </div>
     )
   }
