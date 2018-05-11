@@ -20,6 +20,7 @@ export class CustomLogin extends React.Component<Props, State> {
 
   login = (email?: string, password?: string): string | undefined => {
     const results = this.loginService.login(email, password);
+    console.log('Login results', results);
     return results;
   }
 

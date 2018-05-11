@@ -38,8 +38,14 @@ export class CustomLoginUi extends React.Component<Props, State> {
   }
 
   login = () => {
-    const results = this.props.login(this.state.email, this.state.password);
-    this.setLoginState(results);
+    const email = this.state.email;
+    const password = this.state.password;
+    if (!email || !password) {
+      this.setState({errorMessage: 'Email and password is required'})
+    } else {
+      const results = this.props.login(this.state.email, this.state.password);
+      this.setLoginState(results);
+    }
   }
 
   twitterLogin = () => {
@@ -59,6 +65,7 @@ export class CustomLoginUi extends React.Component<Props, State> {
       this.setState({
         shouldDisplayLoginModal: false,
       });
+      this.setState({errorMessage: ''});
     }
   }
 
@@ -78,12 +85,12 @@ export class CustomLoginUi extends React.Component<Props, State> {
   loginModalMarkup = () => {
     return (
       <div className="login-modal">
-        {/* <div className="login-title">5 Calls Login</div> */}
+        <div className="login-title">5 Calls Login</div>
         <div className="login-error-message">
           {this.state.errorMessage}
         </div>
         <form>
-          <div className="fieldset">
+          <div className="login-fieldset">
             <label htmlFor="email">Email</label>
             <div className="input-text">
               <input
@@ -96,7 +103,7 @@ export class CustomLoginUi extends React.Component<Props, State> {
                 />
             </div>
           </div>
-          <div className="fieldset">
+          <div className="login-fieldset">
             <label htmlFor="password">Password</label>
             <div className="input-text">
               <input
@@ -113,7 +120,7 @@ export class CustomLoginUi extends React.Component<Props, State> {
             <button
               type="button"
               id="btn-login"
-              className=""
+              className="login-button"
               onClick={this.login}>
                 Log In
             </button>
@@ -130,7 +137,7 @@ export class CustomLoginUi extends React.Component<Props, State> {
             <button
               type="button"
               id="btn-twitter"
-              className=""
+              className="login-button"
               onClick={this.twitterLogin}>
                 Log In with Twitter
             </button>
@@ -139,7 +146,7 @@ export class CustomLoginUi extends React.Component<Props, State> {
             <button
               type="button"
               id="btn-facebook"
-              className=""
+              className="login-button"
               onClick={this.facebookLogin}>
                 Log In with Facebook
             </button>

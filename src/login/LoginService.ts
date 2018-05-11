@@ -61,7 +61,7 @@ export class LoginService {
     return false;
   }
 
-  login(username?: string, password?: string) {
+  login(username?: string, password?: string): string | undefined {
     // this.auth0.authorize();
     username = username || '';
     password = password || '';
@@ -72,7 +72,7 @@ export class LoginService {
         // const err: auth0base.Auth0Error = null;
         console.error('Auth0 LoginService.login() error', error)
         if (error) {
-          results = error.errorDescription;
+          results = error.description;
         }
       }
     );
