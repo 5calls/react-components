@@ -5,11 +5,11 @@ import { LoginService } from './LoginService';
 
 interface Props{
   readonly profile?: UserProfile;
-  login: (email?: string, password?: string) => string | undefined;
+  login: (email?: string, password?: string) => Promise<string>;
   twitterLogin: () => void;
   facebookLogin: () => void;
   logout: () => void;
-  signup: (email?: string, password?: string) => string | undefined;
+  signup: (email?: string, password?: string) => Promise<string>;
 };
 
 interface State{
@@ -40,22 +40,41 @@ export class CustomLoginUi extends React.Component<Props, State> {
   signup = () => {
     const email = this.state.email;
     const password = this.state.password;
-    if (!email || !password) {
-      this.setState({errorMessage: 'Email and password is required'})
+    const invalid = this.validateEmailPassword(email, password);
+    if (invalid) {
+      this.setState({errorMessage: invalid});
     } else {
-      const results = this.props.signup(this.state.email, this.state.password);
-      this.setLoginState(results);
+      this.props.signup(this.state.email, this.state.password)
+        .then(results => this.setLoginState(results))
+        .catch(error => this.setLoginState(error));
     }
   }
 
   login = () => {
     const email = this.state.email;
     const password = this.state.password;
-    if (!email || !password) {
-      this.setState({errorMessage: 'Email and password is required'})
+    const invalid = this.validateEmailPassword(email, password);
+    if (invalid) {
+      this.setState({errorMessage: invalid});
     } else {
-      const results = this.props.login(this.state.email, this.state.password);
-      this.setLoginState(results);
+      this.props.login(this.state.email, this.state.password)
+        .then(results => this.setLoginState(results))
+        .catch(error => this.setLoginState(error));
+    }
+  }
+
+  validateEmailPassword = (email: string, password: string): string => {
+    if (!email || !password) {
+      return 'Email and password is required';
+    }
+    // Check email format
+    // Email regex taken from OWASP Regex Validation Repository:
+    // https://www.owasp.org/index.php/OWASP_Validation_Regex_Repository
+    const emailRegex = '^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$';
+    if (!email.match(emailRegex)) {
+      return 'Email is in the wrong format';
+    } else {
+      return '';
     }
   }
 

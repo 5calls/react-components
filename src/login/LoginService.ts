@@ -54,38 +54,48 @@ export class LoginService {
     return false;
   }
 
-  signup = (username?: string, password?: string): string | undefined => {
+  signup = (username: string = '', password: string = ''): Promise<string> => {
     username = username || '';
     password = password || '';
-    let results: string | undefined = undefined;
-
-    this.auth0.redirect.signupAndLogin({
-      connection: databaseConnection,
-      email: username,
-      password: password
-    }, (error:  auth0base.Auth0Error | null) => {
-      if (error) {
-        console.error('Auth0 LoginService.signup() error', error);
-        results = error.description;
-      };
+    return new Promise((resolve, reject) => {
+      try {
+        this.auth0.redirect.signupAndLogin({
+          connection: databaseConnection,
+          email: username,
+          password: password
+          }, (error:  auth0base.Auth0Error | null) => {
+            if (error) {
+              console.error('Auth0 LoginService.signup() error', error);
+              const results = error.description;
+              reject(results);
+            } else {
+              resolve('');
+            }
+        });
+      } catch (error) {
+        reject(error);
+      }
     });
-    return results;
   }
 
-  login(username?: string, password?: string): string | undefined {
-    username = username || '';
-    password = password || '';
-    let results: string | undefined = undefined;
-    this.auth0.login(
-      { realm: databaseConnection, username, password },
-      (error:  auth0base.Auth0Error | null) => {
-        console.error('Auth0 LoginService.login() error', error);
-        if (error) {
-          results = error.description;
-        }
+  login(username: string = '', password: string = ''): Promise<string> {
+    return new Promise((resolve, reject) => {
+      try {
+        this.auth0.login(
+        { realm: databaseConnection, username, password },
+        (error:  auth0base.Auth0Error | null) => {
+          console.error('Auth0 LoginService.login() error', error);
+          if (error) {
+            const results = error.description;
+            reject(results);
+          } else {
+            return resolve('');
+          }
+        });
+      } catch(err) {
+        reject(err);
       }
-    );
-    return results;
+    });
   }
 
   twitterLogin = () => {

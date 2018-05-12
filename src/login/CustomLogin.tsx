@@ -20,16 +20,12 @@ export class CustomLogin extends React.Component<Props, State> {
     this.loginService = new LoginService(this.props.auth0Config);
   }
 
-  signup = (email?: string, password?: string): string | undefined => {
-    const results = this.loginService.signup(email, password);
-    console.log('Signup results', results);
-    return results;
+  signup = (email: string = '', password: string = ''): Promise<string> => {
+    return this.loginService.signup(email, password);
   }
 
-  login = (email?: string, password?: string): string | undefined => {
-    const results = this.loginService.login(email, password);
-    console.log('Login results', results);
-    return results;
+  login = (email: string = '', password: string = ''): Promise<string> => {
+    return this.loginService.login(email, password);
   }
 
   twitterLogin = () => {
