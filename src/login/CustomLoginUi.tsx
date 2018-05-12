@@ -140,7 +140,8 @@ export class CustomLoginUi extends React.Component<Props, State> {
             <button
               type="button"
               id="btn-signup"
-              className="login-button">
+              className="login-button"
+              onClick={this.signup}>
                 Sign Up
             </button>
           </div>
