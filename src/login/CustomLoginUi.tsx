@@ -96,7 +96,14 @@ export class CustomLoginUi extends React.Component<Props, State> {
   loginModalMarkup = () => {
     return (
       <div className="login-modal">
-        <div className="login-title">5 Calls Login</div>
+        <div className="login-header">
+          <img
+            className="stars"
+            src={'/img/5calls-stars.png'}
+            alt="Make your voice heard"
+          />
+          <div className="login-title">5 Calls Login</div>
+        </div>
         <div className="login-error-message">
           {this.state.errorMessage}
         </div>
@@ -135,8 +142,6 @@ export class CustomLoginUi extends React.Component<Props, State> {
               onClick={this.login}>
                 Log In
             </button>
-          </div>
-          <div className="btn-block">
             <button
               type="button"
               id="btn-signup"
@@ -149,7 +154,7 @@ export class CustomLoginUi extends React.Component<Props, State> {
             <button
               type="button"
               id="btn-twitter"
-              className="login-button"
+              className="app-login-button"
               onClick={this.twitterLogin}>
                 Log In with Twitter
             </button>
@@ -158,7 +163,7 @@ export class CustomLoginUi extends React.Component<Props, State> {
             <button
               type="button"
               id="btn-facebook"
-              className="login-button"
+              className="app-login-button"
               onClick={this.facebookLogin}>
                 Log In with Facebook
             </button>
