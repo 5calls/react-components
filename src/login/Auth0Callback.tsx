@@ -6,6 +6,7 @@ import { AuthResponse, Auth0Config } from '../shared/model';
 
 interface Props {
   readonly auth0Config: Auth0Config;
+  readonly redirectPath?: string;
   handleAuthentication: (authResponse: AuthResponse) => Promise<AuthResponse>;
 }
 
@@ -32,7 +33,9 @@ export class Auth0Callback extends React.Component<Props, State> {
 
   render() {
     if (this.state.doneRedirect) {
-      return <Redirect to="/"/>;
+      const redirect = this.props.redirectPath ?
+        this.props.redirectPath : '/';
+      return <Redirect to={redirect}/>;
     } else {
       return <h1>Logging you in...</h1>;
     }
