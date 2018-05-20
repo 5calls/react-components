@@ -42,15 +42,14 @@ export class CustomLogin extends React.Component<Props, State> {
 
   render() {
     return (
-      <div>
-        <CustomLoginUi
-          profile={this.props.userProfile}
-          login={this.login}
-          twitterLogin={this.twitterLogin}
-          facebookLogin={this.facebookLogin}
-          logout={this.logout}
-          signup={this.signup}/>
-      </div>
+      <CustomLoginUi
+        profile={this.props.userProfile}
+        login={this.login}
+        twitterLogin={this.twitterLogin}
+        facebookLogin={this.facebookLogin}
+        logout={this.logout}
+        signup={this.signup}
+      />
     )
   }
 }

@@ -113,114 +113,119 @@ export class CustomLoginUi extends React.Component<Props, State> {
   }
 
   loginModalMarkup = () => {
-    return (
-      <div className="login-modal">
-        <div className="login-header">
-          <img
-            className="stars"
-            src={'/img/5calls-stars.png'}
-            alt="Make your voice heard"
-          />
-          <div className="login-title">5 Calls Login</div>
-        </div>
-        <div className="login-error-message">
-          {this.state.errorMessage}
-        </div>
-        <form>
-          <div className="login-fieldset">
-            <label htmlFor="email">Email</label>
-            <div className="input-text">
-              <input
-                type="email"
-                className="login-input"
-                id="email"
-                placeholder="Enter your email"
-                value={this.state.email}
-                onChange={(event) => this.setState({email: event.target.value})}
-                />
+    if (this.state.shouldDisplayLoginModal) {
+      return (
+        <div className="login-modal">
+          <div className="login-header">
+            <img
+              className="stars"
+              src={'/img/5calls-stars.png'}
+              alt="Make your voice heard"
+            />
+            <div className="login-title">5 Calls Login</div>
+          </div>
+          <div className="login-error-message">
+            {this.state.errorMessage}
+          </div>
+          <form>
+            <div className="login-fieldset">
+              <label htmlFor="email">Email</label>
+              <div className="input-text">
+                <input
+                  type="email"
+                  className="login-input"
+                  id="email"
+                  placeholder="Enter your email"
+                  value={this.state.email}
+                  onChange={(event) => this.setState({email: event.target.value})}
+                  />
+              </div>
             </div>
-          </div>
-          <div className="login-fieldset">
-            <label htmlFor="password">Password</label>
-            <div className="input-text">
-              <input
-                type="password"
-                className="login-input"
-                id="password"
-                placeholder="Enter your password"
-                value={this.state.password}
-                onChange={(event) => this.setState({password: event.target.value})}
-                />
+            <div className="login-fieldset">
+              <label htmlFor="password">Password</label>
+              <div className="input-text">
+                <input
+                  type="password"
+                  className="login-input"
+                  id="password"
+                  placeholder="Enter your password"
+                  value={this.state.password}
+                  onChange={(event) => this.setState({password: event.target.value})}
+                  />
+              </div>
             </div>
-          </div>
-          <div className="btn-block">
-            <button
-              type="button"
-              id="btn-login"
-              className="login-button"
-              onClick={this.login}>
-                Log In
-            </button>
-            <button
-              type="button"
-              id="btn-signup"
-              className="login-button"
-              onClick={this.signup}>
-                Sign Up
-            </button>
-          </div>
-          <div className="btn-block">
-            <button
-              type="button"
-              id="btn-twitter"
-              className="app-login-button"
-              onClick={this.twitterLogin}>
-                Log In with Twitter
-            </button>
-          </div>
-          <div className="btn-block">
-            <button
-              type="button"
-              id="btn-facebook"
-              className="app-login-button"
-              onClick={this.facebookLogin}>
-                Log In with Facebook
-            </button>
-          </div>
-        </form>
-      </div>
-    );
+            <div className="btn-block">
+              <button
+                type="button"
+                id="btn-login"
+                className="login-button"
+                onClick={this.login}>
+                  Log In
+              </button>
+              <button
+                type="button"
+                id="btn-signup"
+                className="login-button"
+                onClick={this.signup}>
+                  Sign Up
+              </button>
+            </div>
+            <div className="btn-block">
+              <button
+                type="button"
+                id="btn-twitter"
+                className="app-login-button"
+                onClick={this.twitterLogin}>
+                  Log In with Twitter
+              </button>
+            </div>
+            <div className="btn-block">
+              <button
+                type="button"
+                id="btn-facebook"
+                className="app-login-button"
+                onClick={this.facebookLogin}>
+                  Log In with Facebook
+              </button>
+            </div>
+          </form>
+        </div>
+      );
+    } else {
+      return <span />
+    }
   }
 
   loginButtonMarkup = () => {
     return (
-      <div className="userHeader">
-        <a onClick={this.showLoginModal}>
-          <img
-            className="stars"
-            src={this.props.profile ? this.props.profile.picture : '/img/5calls-stars.png'}
-            alt="Make your voice heard"
-          />
-        </a>
-        <p><a onClick={this.showLoginModal}>{this.props.profile ? this.props.profile.name : 'Login'}</a></p>
-        { !this.state.userMenuHidden &&
-        <div className="userHeader__menu">
-          <ul>
-            <li><Link to="/impact">My Impact</Link></li>
-            <li className="line"/>
-            <li><a href="#" onClick={this.logout}><strong>Log out</strong></a></li>
-          </ul>
+      <span>
+        <div className="userHeader">
+          <a onClick={this.showLoginModal}>
+            <img
+              className="stars"
+              src={this.props.profile ? this.props.profile.picture : '/img/5calls-stars.png'}
+              alt="Make your voice heard"
+            />
+          </a>
+          <p><a onClick={this.showLoginModal}>{this.props.profile ? this.props.profile.name : 'Login'}</a></p>
+          { !this.state.userMenuHidden &&
+          <div className="userHeader__menu">
+            <ul>
+              <li><Link to="/impact">My Impact</Link></li>
+              <li className="line"/>
+              <li><a href="#" onClick={this.logout}><strong>Log out</strong></a></li>
+            </ul>
+          </div>
+          }
         </div>
-        }
-      </div>
+        {this.loginModalMarkup()}
+      </span>
     );
   }
 
   render() {
-    if (!this.state.shouldDisplayLoginModal) {
-      return this.loginButtonMarkup();
-    } else {
-      return this.loginModalMarkup();
-    }
+    return (
+      this.loginButtonMarkup()
+    )
   }
 }
