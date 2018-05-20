@@ -23,28 +23,32 @@ export class LoginService {
     });
   }
 
-  checkAndRenewSession(profile?: UserProfile) {
-    if (profile !== undefined) {
-      // only act on people who are logged in
-      let expires = new Date(profile.exp * 1000);
-      let now = new Date();
-      if (expires < now) {
-        // try to renew automatically
-        this.auth0.checkSession({}, (error, result) => {
-          if (error !== null) {
-            // not sure how this might happen, log out for now
-            // tslint:disable-next-line:no-console
-            console.error('LoginService.checkAndRenewSession() error: ', error);
-            // this.logout(); //FIXME: this.logout() is a noop
-          } else {
-            // otherwise we get the refreshed details back and update them
-            this.decodeAndSetProfile(result);
-          }
-        });
+  checkAndRenewSession(profile?: UserProfile): Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (profile !== undefined) {
+        // only act on people who are logged in
+        let expires = new Date(profile.exp * 1000);
+        let now = new Date();
+        if (expires < now) {
+          // try to renew automatically
+          this.auth0.checkSession({}, (error, result) => {
+            if (error !== null) {
+              // not sure how this might happen, reject and log out in the app
+              reject(error);
+            } else {
+              // otherwise we get the refreshed details back and update them
+              this.decodeAndSetProfile(result);
+              resolve('');
+            }
+          });
+        } else {
+          // we're good for now, don't do anything
+          resolve('');
+        }
       } else {
-        // we're good for now, don't do anything
+        reject("no profile for check");
       }
-    }
+    });
   }
 
   isLoggedIn(user?: UserState): boolean {
