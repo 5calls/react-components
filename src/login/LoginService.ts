@@ -7,11 +7,13 @@ const databaseConnection = 'Username-Password-Authentication';
 export class LoginService {
 
   auth0: auth0base.WebAuth;
+  popup: boolean;
 
   constructor(auth0Config: Auth0Config) {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
+    this.popup = auth0Config.popupAuth;
 
     this.auth0 = new auth0base.WebAuth({
       domain: auth0Config.domain,
@@ -103,10 +105,17 @@ export class LoginService {
   }
 
   twitterLogin = () => {
-    this.auth0.authorize({
-      connection: 'twitter', // use connection identifier
-
-    });
+    if (this.popup) {
+      this.auth0.popup.authorize({
+        connection: 'twitter', // use connection identifier
+      }, (err, authResult) => {
+        // handled in handleAuthentication
+      });  
+    } else {
+      this.auth0.authorize({
+        connection: 'twitter'
+      });
+    }
   }
 
   facebookLogin = () => {

@@ -44,6 +44,7 @@ export class CustomLogin extends React.Component<Props, State> {
     return (
       <CustomLoginUi
         profile={this.props.userProfile}
+        auth0Config={this.props.auth0Config}
         login={this.login}
         twitterLogin={this.twitterLogin}
         facebookLogin={this.facebookLogin}

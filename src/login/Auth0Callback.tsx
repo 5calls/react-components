@@ -35,6 +35,10 @@ export class Auth0Callback extends React.Component<Props, State> {
     if (this.state.doneRedirect) {
       const redirect = this.props.redirectPath ?
         this.props.redirectPath : '/';
+
+      if (window.opener) {
+        window.opener.postMessage('authenticationDone', '*');
+      }
       return <Redirect to={redirect}/>;
     } else {
       return <h1>Logging you in...</h1>;

@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { UserProfile } from '../shared/model';
+import { UserProfile, Auth0Config } from '../shared/model';
 import { LoginService } from './LoginService';
 
 interface Props{
   readonly profile?: UserProfile;
+  readonly auth0Config: Auth0Config;
   login: (email?: string, password?: string) => Promise<string>;
   twitterLogin: () => void;
   facebookLogin: () => void;
@@ -18,6 +19,7 @@ interface State{
   errorMessage: string;
   shouldDisplayLoginModal: boolean;
   userMenuHidden: boolean;
+  
 };
 
 export class CustomLoginUi extends React.Component<Props, State> {
@@ -35,6 +37,10 @@ export class CustomLoginUi extends React.Component<Props, State> {
 
   toggleMenu = (): void => {
     this.setState({ userMenuHidden: !this.state.userMenuHidden });
+  }
+
+  toggleModal = (): void => {
+    this.setState({ shouldDisplayLoginModal: !this.state.shouldDisplayLoginModal });
   }
 
   signup = () => {
@@ -112,23 +118,62 @@ export class CustomLoginUi extends React.Component<Props, State> {
     }
   }
 
+  showCampaignLogo = (): boolean => {
+    // if we pass a campaign url, customize the design
+    if (this.props.auth0Config.campaignPhotoURL) {
+      return true;
+    }
+
+    return false;
+  }
+
+  headerPhotoURL = (): string => {
+    if (this.props.auth0Config.campaignPhotoURL) {
+      return this.props.auth0Config.campaignPhotoURL;
+    }
+
+    return '/img/5calls-stars.png';
+  }
+
+  headerName = (): string => {
+    if (this.props.auth0Config.campaignName) {
+      return this.props.auth0Config.campaignName;
+    }
+
+    return '5 Calls';
+  }
+
   loginModalMarkup = () => {
     if (this.state.shouldDisplayLoginModal) {
       return (
+        <span>
+        <div className="login-modal-mask" onClick={this.toggleModal}>&nbsp;</div>
         <div className="login-modal">
           <div className="login-header">
-            <img
-              className="stars"
-              src={'/img/5calls-stars.png'}
-              alt="Make your voice heard"
-            />
-            <div className="login-title">5 Calls Login</div>
+            <p className="login-header-explainer">Track your calls across campaigns, join call teams and see your impact on issues you care about by logging in.</p>
+            {this.showCampaignLogo()
+            ? <div className="login-header-logo">
+                <a href={this.props.auth0Config.poweredURL} target="_blank"><img
+                  className="stars"
+                  src="/img/5calls-stars.png"
+                  alt="Powered by 5 Calls"
+                /></a>
+                <p className="login-header-logo-powered">Powered by <strong>5 Calls</strong></p>
+              </div>
+            : <></>}
           </div>
-          <div className="login-error-message">
-            {this.state.errorMessage}
-          </div>
-          <form>
-            <div className="login-fieldset">
+          <div className="login-choices">
+            <div className="login-header-logo">
+              <img
+                className="stars"
+                src={this.headerPhotoURL()}
+                alt={this.headerName()}
+              />
+              <p className="login-header-logo-campaign">Log in to<br />{this.headerName()}</p>
+            </div>
+
+          {/* <form> */}
+            {/* <div className="login-fieldset">
               <label htmlFor="email">Email</label>
               <div className="input-text">
                 <input
@@ -169,27 +214,32 @@ export class CustomLoginUi extends React.Component<Props, State> {
                 onClick={this.signup}>
                   Sign Up
               </button>
-            </div>
+            </div> */}
             <div className="btn-block">
               <button
                 type="button"
                 id="btn-twitter"
-                className="app-login-button"
+                className="app-login-button btn-twitter"
                 onClick={this.twitterLogin}>
-                  Log In with Twitter
+                <i className="fab fa-twitter"></i>Log In with Twitter
               </button>
             </div>
             <div className="btn-block">
               <button
                 type="button"
                 id="btn-facebook"
-                className="app-login-button"
+                className="app-login-button btn-facebook"
                 onClick={this.facebookLogin}>
-                  Log In with Facebook
+                <i className="fab fa-facebook-square"></i>Log In with Facebook
               </button>
             </div>
-          </form>
+            <div className="btn-block">
+              <a className="button-cancel" onClick={this.toggleModal}>Cancel</a>
+            </div>
+          </div>
+          {/* </form> */}
         </div>
+        </span>
       );
     } else {
       return <span />
@@ -207,7 +257,7 @@ export class CustomLoginUi extends React.Component<Props, State> {
               alt="Make your voice heard"
             />
           </a>
-          <p><a onClick={this.showLoginModal}>{this.props.profile ? this.props.profile.name : 'Login'}</a></p>
+          <p><a onClick={this.showLoginModal}>{this.props.profile ? this.props.profile.name : 'Log in'}</a></p>
           { !this.state.userMenuHidden &&
           <div className="userHeader__menu">
             <ul>

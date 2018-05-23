@@ -23,8 +23,12 @@ export interface AuthResponse {
 }
 
 export interface Auth0Config {
+  readonly poweredURL: string;
   readonly domain: string;
   readonly clientId: string;
   readonly callbackUri: string;
   readonly audience: string;
+  readonly popupAuth: boolean;
+  readonly campaignPhotoURL: string;
+  readonly campaignName: string;
 }
