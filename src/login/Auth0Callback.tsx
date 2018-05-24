@@ -2,10 +2,12 @@ import * as React from 'react';
 import { Redirect } from 'react-router';
 
 import { LoginService } from './LoginService';
-import { AuthResponse } from '../shared/model';
+import { AuthResponse, Auth0Config } from '../shared/model';
 
 interface Props {
-  readonly handleAuthentication: (authResponse: AuthResponse) => Promise<AuthResponse>;
+  readonly auth0Config: Auth0Config;
+  readonly redirectPath?: string;
+  handleAuthentication: (authResponse: AuthResponse) => Promise<AuthResponse>;
 }
 
 interface State {
@@ -13,10 +15,12 @@ interface State {
 }
 
 export class Auth0Callback extends React.Component<Props, State> {
-  loginService = new LoginService();
+  loginService: LoginService;
+
   constructor(props: Props) {
     super(props);
     this.state = {doneRedirect: false};
+    this.loginService = new LoginService(this.props.auth0Config);
   }
 
   componentDidMount() {
@@ -29,7 +33,13 @@ export class Auth0Callback extends React.Component<Props, State> {
 
   render() {
     if (this.state.doneRedirect) {
-      return <Redirect to="/"/>;
+      const redirect = this.props.redirectPath ?
+        this.props.redirectPath : '/';
+
+      if (window.opener) {
+        window.opener.postMessage('authenticationDone', '*');
+      }
+      return <Redirect to={redirect}/>;
     } else {
       return <h1>Logging you in...</h1>;
     }

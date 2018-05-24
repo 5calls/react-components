@@ -1,57 +1,56 @@
 import * as auth0base from 'auth0-js';
 import jwt from 'jwt-decode';
+import { UserState, UserProfile, AuthResponse, Auth0Config } from '../shared/model';
 
-import * as Constants from '../shared/constants';
-import { UserState, UserProfile, AuthResponse } from '../shared/model';
-
-const callbackURI = () => {
-  if (window.location.host.includes('localhost')) {
-    return 'http://localhost:3000/auth0callback';
-  } else if (window.location.host.includes('test.5calls.org')) {
-    return 'https://test.5calls.org/auth0callback';
-  }
-
-  return 'https://5calls.org/auth0callback';
-};
+const databaseConnection = 'Username-Password-Authentication';
 
 export class LoginService {
-  auth0 = new auth0base.WebAuth({
-    domain: Constants.AUTH0_DOMAIN,
-    clientID: Constants.AUTH0_CLIENT_ID,
-    redirectUri: callbackURI(),
-    audience: 'https://5callsos.auth0.com/userinfo',
-    responseType: 'token id_token',
-    scope: 'openid profile email',
-  });
 
-  constructor() {
+  auth0: auth0base.WebAuth;
+  popup: boolean;
+
+  constructor(auth0Config: Auth0Config) {
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
+    this.popup = auth0Config.popupAuth;
+
+    this.auth0 = new auth0base.WebAuth({
+      domain: auth0Config.domain,
+      clientID: auth0Config.clientId,
+      redirectUri: auth0Config.callbackUri,
+      audience: auth0Config.audience,
+      responseType: 'token id_token',
+      scope: 'openid profile email',
+    });
   }
 
-  checkAndRenewSession(profile?: UserProfile) {
-    if (profile !== undefined) {
-      // only act on people who are logged in
-      let expires = new Date(profile.exp * 1000);
-      let now = new Date();
-      if (expires < now) {
-        // try to renew automatically
-        this.auth0.checkSession({}, (error, result) => {
-          if (error !== null) {
-            // not sure how this might happen, log out for now
-            // tslint:disable-next-line:no-console
-            console.error('LoginService.checkAndRenewSession() error: ', error);
-            // this.logout(); //FIXME: this.logout() is a noop
-          } else {
-            // otherwise we get the refreshed details back and update them
-            this.decodeAndSetProfile(result);
-          }
-        });
+  checkAndRenewSession(profile?: UserProfile): Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (profile !== undefined) {
+        // only act on people who are logged in
+        let expires = new Date(profile.exp * 1000);
+        let now = new Date();
+        if (expires < now) {
+          // try to renew automatically
+          this.auth0.checkSession({}, (error, result) => {
+            if (error !== null) {
+              // not sure how this might happen, reject and log out in the app
+              reject(error);
+            } else {
+              // otherwise we get the refreshed details back and update them
+              this.decodeAndSetProfile(result);
+              resolve('');
+            }
+          });
+        } else {
+          // we're good for now, don't do anything
+          resolve('');
+        }
       } else {
-        // we're good for now, don't do anything
+        reject("no profile for check");
       }
-    }
+    });
   }
 
   isLoggedIn(user?: UserState): boolean {
@@ -61,8 +60,68 @@ export class LoginService {
     return false;
   }
 
-  login() {
-    this.auth0.authorize();
+  signup = (username: string = '', password: string = ''): Promise<string> => {
+    username = username || '';
+    password = password || '';
+    return new Promise((resolve, reject) => {
+      try {
+        this.auth0.redirect.signupAndLogin({
+          connection: databaseConnection,
+          email: username,
+          password: password
+          }, (error:  auth0base.Auth0Error | null) => {
+            if (error) {
+              console.error('Auth0 LoginService.signup() error', error);
+              const results = error.description;
+              reject(results);
+            } else {
+              resolve('');
+            }
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  login(username: string = '', password: string = ''): Promise<string> {
+    return new Promise((resolve, reject) => {
+      try {
+        this.auth0.login(
+        { realm: databaseConnection, username, password },
+        (error:  auth0base.Auth0Error | null) => {
+          console.error('Auth0 LoginService.login() error', error);
+          if (error) {
+            const results = error.description;
+            reject(results);
+          } else {
+            return resolve('');
+          }
+        });
+      } catch(err) {
+        reject(err);
+      }
+    });
+  }
+
+  twitterLogin = () => {
+    if (this.popup) {
+      this.auth0.popup.authorize({
+        connection: 'twitter', // use connection identifier
+      }, (err, authResult) => {
+        // handled in handleAuthentication
+      });  
+    } else {
+      this.auth0.authorize({
+        connection: 'twitter'
+      });
+    }
+  }
+
+  facebookLogin = () => {
+    this.auth0.authorize({
+      connection: 'facebook' // use connection identifier
+    });
   }
 
   logout() {
@@ -79,6 +138,7 @@ export class LoginService {
           reject(error);
         } else {
           const authResponse: AuthResponse = this.decodeAndSetProfile(authResult);
+          console.log('LoginService.handleAuthentication called. Auth response', authResponse);
           resolve(authResponse);
         }
       });
@@ -91,9 +151,7 @@ export class LoginService {
     let authToken = '';
     if (auth0Hash.idToken) {
       authToken = auth0Hash.idToken;
-      // console.log('token is ', auth0Hash.idToken);
       userProfile = jwt(auth0Hash.idToken);
-      // console.log('jwt decodes to', profile);
     }
     return {authToken, userProfile };
   }
