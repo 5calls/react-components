@@ -150,7 +150,9 @@ export class CustomLoginUi extends React.Component<Props, State> {
         <div className="login-modal-mask" onClick={this.toggleModal}>&nbsp;</div>
         <div className="login-modal">
           <div className="login-header">
-            <p className="login-header-explainer">Track your calls across campaigns, join call teams and see your impact on issues you care about by logging in.</p>
+            <p className="login-header-explainer">
+              Track your calls, join call teams and see your impact on issues you care about!
+            </p>
             {this.showCampaignLogo()
             ? <div className="login-header-logo">
                 <a href={this.props.auth0Config.poweredURL} target="_blank"><img
