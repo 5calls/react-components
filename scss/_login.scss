@@ -1,0 +1,148 @@
+.login-modal-mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 990;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0.8, 0.8, 0.8, 0.3)
+}
+
+.login-modal {
+  position: absolute;
+  top: 150px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: 999;
+
+  width: 700px;
+  height: 220px;
+  background-color: white;
+  // border: 1px solid #888;
+  padding: 10px 15px;
+  border-radius: 15px;
+  box-shadow: 0 0 12px #888888;
+
+  @include bp(small) {
+    width: 96%;
+    margin: 0 2%;
+    height: inherit;
+  }
+
+  .login-header-logo {
+    display: inline-block;
+    margin: 10px auto 10px auto;
+
+    @include bp(small) {
+      margin: 0 auto 20px auto;
+    }
+
+    img {
+      float: left;
+      width: 50px;
+      height: 50px;
+      margin: 4px 10px 0 0;
+      border-radius: 25px;
+    }
+
+    &-campaign {
+      max-width: 220px;
+      overflow: hidden;
+      float: left;
+      margin-bottom: 0;
+      font-size: 22px;
+      font-style: italic;
+      text-align: left;
+    }
+    &-powered {
+      max-width: 220px;
+      overflow: hidden;
+      float: left;
+      margin: 4px 0 0 0;
+      line-height: 52px;
+      font-size: 22px;
+      font-style: italic;
+      text-align: left;
+    }
+  }
+}
+
+.login-header {
+  width: 340px;
+  float: left;
+  padding: 10px;
+  text-align: center;
+
+  @include bp(small) {
+    width: inherit;
+    float: none;
+  }
+
+  &-explainer {
+    text-align: left;
+  }  
+
+  // .login-title {
+  //   display: inline;
+  //   text-align: center;
+  //   font-size: 30px;
+  //   font-weight: bold;
+  //   color: #000;
+  // }
+}
+
+.login-choices {
+  width: 320px;
+  float: right;
+  text-align: center;
+
+  @include bp(small) {
+    width: inherit;
+    float: none;
+  }
+
+  button {
+    width: 300px;
+    margin-bottom: 12px;
+    font-size: 18px;
+    text-transform: none;
+    color: #fff;
+
+    i {
+      margin-right: 6px;
+    }
+
+    &.btn-facebook {
+      background-color: #3B5998;
+    }
+    &.btn-twitter {
+      background-color: #1DA1F2;
+    }
+  }
+}
+
+.login-error-message {
+  color: red;
+}
+
+.login-fieldset {
+  display: block;
+}
+
+.btn-block:first-child {
+  display: inline;
+  color: red;
+}
+
+.login-signup-container {
+  margin: 0 auto;
+}
+
+.login-button {
+  width: 47%;
+}
+
+.app-login-button {
+  width: 100%;
+}
