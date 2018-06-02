@@ -24,19 +24,19 @@
   border-radius: 15px;
   box-shadow: 0 0 12px #888888;
 
-  @include bp(small) {
-    width: 96%;
-    margin: 0 2%;
-    height: inherit;
-  }
+  // @include bp(small) {
+  //   width: 96%;
+  //   margin: 0 2%;
+  //   height: inherit;
+  // }
 
   .login-header-logo {
     display: inline-block;
     margin: 10px auto 10px auto;
 
-    @include bp(small) {
-      margin: 0 auto 20px auto;
-    }
+    // @include bp(small) {
+    //   margin: 0 auto 20px auto;
+    // }
 
     img {
       float: left;
@@ -74,22 +74,15 @@
   padding: 10px;
   text-align: center;
 
-  @include bp(small) {
-    width: inherit;
-    float: none;
-  }
+  // @include bp(small) {
+  //   width: inherit;
+  //   float: none;
+  // }
 
   &-explainer {
     text-align: left;
-  }  
+  }
 
-  // .login-title {
-  //   display: inline;
-  //   text-align: center;
-  //   font-size: 30px;
-  //   font-weight: bold;
-  //   color: #000;
-  // }
 }
 
 .login-choices {
@@ -97,10 +90,10 @@
   float: right;
   text-align: center;
 
-  @include bp(small) {
-    width: inherit;
-    float: none;
-  }
+  // @include bp(small) {
+  //   width: inherit;
+  //   float: none;
+  // }
 
   button {
     width: 300px;
