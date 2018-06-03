@@ -110,7 +110,7 @@ export class LoginService {
         connection: 'twitter', // use connection identifier
       }, (err, authResult) => {
         // handled in handleAuthentication
-      });  
+      });
     } else {
       this.auth0.authorize({
         connection: 'twitter'
