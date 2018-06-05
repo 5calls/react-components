@@ -120,7 +120,7 @@ export class CustomLoginUi extends React.Component<Props, State> {
 
   showCampaignLogo = (): boolean => {
     // if we pass a campaign url, customize the design
-    if (this.props.auth0Config.campaignPhotoURL) {
+    if (this.props.auth0Config.campaignName) {
       return true;
     }
 
@@ -133,14 +133,6 @@ export class CustomLoginUi extends React.Component<Props, State> {
     }
 
     return '/img/5calls-stars.png';
-  }
-
-  headerName = (): string => {
-    if (this.props.auth0Config.campaignName) {
-      return this.props.auth0Config.campaignName;
-    }
-
-    return '5 Calls';
   }
 
   loginModalMarkup = () => {
@@ -162,61 +154,23 @@ export class CustomLoginUi extends React.Component<Props, State> {
                 /></a>
                 <p className="login-header-logo-powered">Powered by <strong>5 Calls</strong></p>
               </div>
-            : <></>}
+            : <span></span>}
           </div>
           <div className="login-choices">
             <div className="login-header-logo">
               <img
                 className="stars"
                 src={this.headerPhotoURL()}
-                alt={this.headerName()}
+                alt={this.props.auth0Config.campaignName ? this.props.auth0Config.campaignName : '5 Calls'}
               />
-              <p className="login-header-logo-campaign">Log in to<br />{this.headerName()}</p>
+              <p className="login-header-logo-campaign">
+                {this.props.auth0Config.campaignName
+                ? <span>Log in to call for<br />{this.props.auth0Config.campaignName}</span>
+                : <span>Log in to<br />5 Calls</span>
+                }
+              </p>
             </div>
 
-          {/* <form> */}
-            {/* <div className="login-fieldset">
-              <label htmlFor="email">Email</label>
-              <div className="input-text">
-                <input
-                  type="email"
-                  className="login-input"
-                  id="email"
-                  placeholder="Enter your email"
-                  value={this.state.email}
-                  onChange={(event) => this.setState({email: event.target.value})}
-                  />
-              </div>
-            </div>
-            <div className="login-fieldset">
-              <label htmlFor="password">Password</label>
-              <div className="input-text">
-                <input
-                  type="password"
-                  className="login-input"
-                  id="password"
-                  placeholder="Enter your password"
-                  value={this.state.password}
-                  onChange={(event) => this.setState({password: event.target.value})}
-                  />
-              </div>
-            </div>
-            <div className="btn-block">
-              <button
-                type="button"
-                id="btn-login"
-                className="login-button"
-                onClick={this.login}>
-                  Log In
-              </button>
-              <button
-                type="button"
-                id="btn-signup"
-                className="login-button"
-                onClick={this.signup}>
-                  Sign Up
-              </button>
-            </div> */}
             <div className="btn-block">
               <button
                 type="button"
@@ -263,7 +217,10 @@ export class CustomLoginUi extends React.Component<Props, State> {
           { !this.state.userMenuHidden &&
           <div className="userHeader__menu">
             <ul>
-              <li><Link to="/impact">My Impact</Link></li>
+              {this.props.auth0Config.popupAuth
+              ? <span></span> /* <li><a href={`${this.props.auth0Config.poweredURL}/impact`} target="_blank">My Impact</a></li> */
+              : <li><Link to="/impact">My Impact</Link></li>
+              }
               <li className="line"/>
               <li><a href="#" onClick={this.logout}><strong>Log out</strong></a></li>
             </ul>

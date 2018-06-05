@@ -29,6 +29,6 @@ export interface Auth0Config {
   readonly callbackUri: string;
   readonly audience: string;
   readonly popupAuth: boolean;
-  readonly campaignPhotoURL: string;
-  readonly campaignName: string;
+  readonly campaignPhotoURL?: string;
+  readonly campaignName?: string;
 }
