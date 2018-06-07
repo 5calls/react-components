@@ -25,7 +25,7 @@ export class LoginService {
     });
   }
 
-  checkAndRenewSession(profile?: UserProfile): Promise<string> {
+  checkAndRenewSession(profile: UserProfile, authToken: string): Promise<AuthResponse> {
     return new Promise((resolve, reject) => {
       if (profile !== undefined) {
         // only act on people who are logged in
@@ -39,13 +39,14 @@ export class LoginService {
               reject(error);
             } else {
               // otherwise we get the refreshed details back and update them
-              this.decodeAndSetProfile(result);
-              resolve('');
+              const authResponse = this.decodeAndSetProfile(result);
+              resolve(authResponse);
             }
           });
         } else {
           // we're good for now, don't do anything
-          resolve('');
+          const authResponse: AuthResponse = {userProfile: profile, authToken: authToken}
+          resolve(authResponse);
         }
       } else {
         reject("no profile for check");
@@ -107,7 +108,7 @@ export class LoginService {
   twitterLogin = () => {
     if (this.popup) {
       this.auth0.popup.authorize({
-        connection: 'twitter', // use connection identifier
+        connection: 'twitter',
       }, (err, authResult) => {
         // handled in handleAuthentication
       });  
@@ -119,9 +120,17 @@ export class LoginService {
   }
 
   facebookLogin = () => {
-    this.auth0.authorize({
-      connection: 'facebook' // use connection identifier
-    });
+    if (this.popup) {
+      this.auth0.popup.authorize({
+        connection: 'facebook',
+      }, (err, authResult) => {
+        // handled in handleAuthentication
+      });  
+    } else {
+      this.auth0.authorize({
+        connection: 'facebook'
+      });
+    }
   }
 
   logout() {

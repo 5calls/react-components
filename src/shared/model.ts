@@ -9,6 +9,7 @@ export interface UserProfile {
   exp: number;
   picture: string; // a url for the users' photo
 }
+
 export interface AuthProvider {
   login: () => void;
   isLoggedIn: () => boolean;
