@@ -48,7 +48,11 @@ To add this project's components to a React jsx or tsx file use an ES2015 import
 ```
 import { Faq } from '@5calls/react-components';
 ```
+The styling of these components will need the following import added to the root application's tsx file.
+```
+import '@5calls/react-components/lib/index.css';
+
+```
 
 ## TODOs
 - Add more components
-- Add local CSS styling
