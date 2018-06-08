@@ -2,19 +2,19 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { UserProfile } from '../shared/model';
 
-interface Props {
+export interface LoginUiProps {
   readonly profile?: UserProfile;
   readonly login: () => void;
   readonly logout: () => void;
 }
 
-interface State {
+export interface LoginUiState {
   userMenuHidden: boolean;
 }
 
-export class LoginUi extends React.Component<Props, State> {
+export class LoginUi extends React.Component<LoginUiProps, LoginUiState> {
 
-  constructor(props: Props) {
+  constructor(props: LoginUiProps) {
     super(props);
 
     this.state = {

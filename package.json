@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npm run rm-node-types && tsc",
     "rm-node-types": "rm -rf ./node_modules/@types/node",
-    "test": "jest"
+    "test": "jest",
+    "generate-dts": "dts-generator --name @5calls/react-components --project ./ --out index.d.ts"
   },
   "repository": {
     "type": "git",
@@ -45,6 +46,7 @@
     "@types/react-dom": "^16.0.5",
     "@types/react-router": "^4.0.24",
     "@types/react-router-dom": "^4.2.6",
+    "dts-generator": "^2.1.0",
     "enzyme": "^3.3.0",
     "enzyme-to-json": "^3.3.3",
     "jest": "^22.4.3",

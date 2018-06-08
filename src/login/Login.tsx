@@ -3,19 +3,19 @@ import { UserProfile, Auth0Config } from '../shared/model';
 import { LoginUi } from './LoginUi';
 import { LoginService } from './LoginService';
 
-interface Props {
+export interface LoginProps {
   readonly auth0Config: Auth0Config;
   readonly userProfile: UserProfile;
   logoutHandler: () => void;
 }
 
-interface State {
+export interface LoginState {
 }
 
-export class Login extends React.Component<Props, State> {
+export class Login extends React.Component<LoginProps, LoginState> {
   loginService: LoginService;
 
-  constructor(props: Props) {
+  constructor(props: LoginProps) {
     super(props);
     this.loginService = new LoginService(this.props.auth0Config);
   }

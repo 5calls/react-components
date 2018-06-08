@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as Constants from '../shared/constants';
 
-export interface Props {
+export interface FaqProps {
 }
 
-export const Faq: React.StatelessComponent<Props> = (props: Props) => {
+export const Faq: React.StatelessComponent<FaqProps> = (props: FaqProps) => {
   return (
     <main id="content" role="main" className="layout__main">
       <div className="about">
