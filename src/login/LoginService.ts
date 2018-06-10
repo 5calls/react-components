@@ -107,8 +107,10 @@ export class LoginService {
 
   twitterLogin = () => {
     if (this.popup) {
+      // @ts-ignore
       this.auth0.popup.authorize({
         connection: 'twitter',
+      // @ts-ignore
       }, (err, authResult) => {
         // handled in handleAuthentication
       });  
@@ -121,8 +123,10 @@ export class LoginService {
 
   facebookLogin = () => {
     if (this.popup) {
+      // @ts-ignore
       this.auth0.popup.authorize({
         connection: 'facebook',
+        // @ts-ignore
       }, (err, authResult) => {
         // handled in handleAuthentication
       });  
