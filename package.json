@@ -7,8 +7,7 @@
     "build": "npm run rm-node-types && npm run clean-build && tsc",
     "rm-node-types": "rm -rf ./node_modules/@types/node",
     "clean-build": "rm -rf ./lib",
-    "test": "jest",
-    "generate-dts": "dts-generator --name @5calls/react-components --project ./ --out index.d.ts && cp index.d.ts lib"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
