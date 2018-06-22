@@ -125,7 +125,7 @@ export class LoginService {
         connection: 'facebook',
       }, (err, authResult) => {
         // handled in handleAuthentication
-      });  
+      });
     } else {
       this.auth0.authorize({
         connection: 'facebook'
