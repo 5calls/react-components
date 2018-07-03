@@ -4,20 +4,20 @@ import { Redirect } from 'react-router';
 import { LoginService } from './LoginService';
 import { AuthResponse, Auth0Config } from '../shared/model';
 
-interface Props {
+export interface Auth0CallbackProps {
   readonly auth0Config: Auth0Config;
   readonly redirectPath?: string;
   handleAuthentication: (authResponse: AuthResponse) => Promise<AuthResponse>;
 }
 
-interface State {
+export interface Auth0CallbackState {
   doneRedirect: boolean;
 }
 
-export class Auth0Callback extends React.Component<Props, State> {
+export class Auth0Callback extends React.Component<Auth0CallbackProps, Auth0CallbackState> {
   loginService: LoginService;
 
-  constructor(props: Props) {
+  constructor(props: Auth0CallbackProps) {
     super(props);
     this.state = {doneRedirect: false};
     this.loginService = new LoginService(this.props.auth0Config);

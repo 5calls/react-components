@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { UserProfile, Auth0Config } from '../shared/model';
 import { LoginService } from './LoginService';
 
-interface Props{
+export interface CustomLoginUiProps{
   readonly profile?: UserProfile;
   readonly auth0Config: Auth0Config;
   login: (email?: string, password?: string) => Promise<string>;
@@ -13,7 +13,7 @@ interface Props{
   signup: (email?: string, password?: string) => Promise<string>;
 };
 
-interface State{
+export interface CustomLoginUiState{
   email: string;
   password: string;
   errorMessage: string;
@@ -22,9 +22,9 @@ interface State{
   
 };
 
-export class CustomLoginUi extends React.Component<Props, State> {
+export class CustomLoginUi extends React.Component<CustomLoginUiProps, CustomLoginUiState> {
 
-  constructor(props: Props) {
+  constructor(props: CustomLoginUiProps) {
     super(props);
     this.state = {
       email: '',

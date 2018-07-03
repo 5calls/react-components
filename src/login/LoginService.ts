@@ -107,11 +107,12 @@ export class LoginService {
 
   twitterLogin = () => {
     if (this.popup) {
+      // @ts-ignore: additional required parameters defined in Auth0 d.ts file is not used here
       this.auth0.popup.authorize({
         connection: 'twitter',
-      }, (err, authResult) => {
+      }, (err: auth0.Auth0Error, authResult: any) => {
         // handled in handleAuthentication
-      });  
+      });
     } else {
       this.auth0.authorize({
         connection: 'twitter'
@@ -121,8 +122,10 @@ export class LoginService {
 
   facebookLogin = () => {
     if (this.popup) {
+      // @ts-ignore
       this.auth0.popup.authorize({
         connection: 'facebook',
+        // @ts-ignore
       }, (err, authResult) => {
         // handled in handleAuthentication
       });

@@ -4,8 +4,9 @@
   "description": "React component library for 5 Calls webapp",
   "main": "lib/index.js",
   "scripts": {
-    "build": "npm run rm-node-types && tsc",
+    "build": "npm run rm-node-types && npm run clean-build && tsc",
     "rm-node-types": "rm -rf ./node_modules/@types/node",
+    "clean-build": "rm -rf ./lib",
     "test": "jest"
   },
   "repository": {
