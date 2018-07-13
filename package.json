@@ -1,6 +1,6 @@
 {
   "name": "@5calls/react-components",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "React component library for 5 Calls webapp",
   "main": "lib/index.js",
   "scripts": {
@@ -79,7 +79,7 @@
     ]
   },
   "dependencies": {
-    "auth0-js": "^9.5.1",
+    "auth0-js": "^9.6.1",
     "jwt-decode": "^2.2.0"
   }
 }
