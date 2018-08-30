@@ -219,7 +219,7 @@ export class CustomLoginUi extends React.Component<CustomLoginUiProps, CustomLog
             <ul>
               {this.props.auth0Config.popupAuth
               ? <span></span> /* <li><a href={`${this.props.auth0Config.poweredURL}/impact`} target="_blank">My Impact</a></li> */
-              : <li><Link to="/impact">My Impact</Link></li>
+              : <li><Link to="/profile">My Profile</Link></li>
               }
               <li className="line"/>
               <li><a href="#" onClick={this.logout}><strong>Log out</strong></a></li>
