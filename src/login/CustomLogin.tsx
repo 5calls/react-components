@@ -8,7 +8,7 @@ export interface CustomLoginProps {
   readonly auth0Config: Auth0Config;
   readonly userProfile?: UserProfile;
   logoutHandler: () => void;
-  refreshHandler: (email: string) => void;
+  refreshHandler: (email: string, subscribe: boolean) => void;
 }
 
 export interface CustomLoginState {

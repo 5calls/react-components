@@ -4,9 +4,8 @@ import { Link } from 'react-router-dom';
 import * as EmailValidator from 'email-validator';
 
 import { UserProfile, Auth0Config } from '../shared/model';
-import { LoginService } from './LoginService';
 
-export interface CustomLoginUiProps{
+export interface CustomLoginUiProps {
   readonly profile?: UserProfile;
   readonly auth0Config: Auth0Config;
   readonly showEmailModal: boolean;
@@ -14,7 +13,7 @@ export interface CustomLoginUiProps{
   twitterLogin: () => void;
   facebookLogin: () => void;
   logout: () => void;
-  refreshHandler: (email: string) => void;
+  refreshHandler: (email: string, subscribe: boolean) => void;
   signup: (email?: string, password?: string) => Promise<string>;
 }
 
@@ -137,7 +136,7 @@ export class CustomLoginUi extends React.Component<CustomLoginUiProps, CustomLog
     if (EmailValidator.validate(this.state.currentEmail)) {
       this.setState({emailIsValid: true});
 
-      this.props.refreshHandler(this.state.currentEmail);
+      this.props.refreshHandler(this.state.currentEmail, this.state.emailOptIn);
     } else {
       this.setState({emailIsValid: false});
     }
@@ -230,7 +229,7 @@ export class CustomLoginUi extends React.Component<CustomLoginUiProps, CustomLog
         </span>
       );
     } else {
-      return <span />
+      return <span />;
     }
   }
 
@@ -276,7 +275,7 @@ export class CustomLoginUi extends React.Component<CustomLoginUiProps, CustomLog
         </span>
       );
     } else {
-      return <span />
+      return <span />;
     }
   }
 
@@ -314,6 +313,6 @@ export class CustomLoginUi extends React.Component<CustomLoginUiProps, CustomLog
   render() {
     return (
       this.loginUIMarkup()
-    )
+    );
   }
 }
