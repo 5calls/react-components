@@ -8,6 +8,8 @@ export interface UserProfile {
   sub: string; // sub is the user id, either a unique userid or twitter|<twitterid>, etc
   exp: number;
   picture: string; // a url for the users' photo
+  'https://5calls.org/email'?: string;
+  'https://5calls.org/phone'?: string;
 }
 
 export interface AuthProvider {

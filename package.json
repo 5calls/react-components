@@ -80,6 +80,7 @@
   },
   "dependencies": {
     "auth0-js": "^9.6.1",
+    "email-validator": "^2.0.4",
     "jwt-decode": "^2.2.0"
   }
 }

@@ -25,13 +25,13 @@ export class LoginService {
     });
   }
 
-  checkAndRenewSession(profile: UserProfile, authToken: string): Promise<AuthResponse> {
+  checkAndRenewSession(profile: UserProfile, authToken: string, force: boolean = false): Promise<AuthResponse> {
     return new Promise((resolve, reject) => {
       if (profile !== undefined) {
         // only act on people who are logged in
         let expires = new Date(profile.exp * 1000);
         let now = new Date();
-        if (expires < now) {
+        if (expires < now || force) {
           // try to renew automatically
           this.auth0.checkSession({}, (error, result) => {
             if (error !== null) {
@@ -150,7 +150,7 @@ export class LoginService {
           reject(error);
         } else {
           const authResponse: AuthResponse = this.decodeAndSetProfile(authResult);
-          console.log('LoginService.handleAuthentication called. Auth response', authResponse);
+          // console.log('LoginService.handleAuthentication called. Auth response', authResponse);
           resolve(authResponse);
         }
       });
@@ -159,12 +159,13 @@ export class LoginService {
 
 
   decodeAndSetProfile(auth0Hash: auth0base.Auth0DecodedHash): AuthResponse {
+    console.log("decoding");
     let userProfile: UserProfile | undefined;
     let authToken = '';
     if (auth0Hash.idToken) {
       authToken = auth0Hash.idToken;
       userProfile = jwt(auth0Hash.idToken);
     }
-    return {authToken, userProfile };
+    return {authToken, userProfile};
   }
 }

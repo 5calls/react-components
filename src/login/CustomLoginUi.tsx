@@ -1,38 +1,48 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+
+import * as EmailValidator from 'email-validator';
+
 import { UserProfile, Auth0Config } from '../shared/model';
 import { LoginService } from './LoginService';
 
 export interface CustomLoginUiProps{
   readonly profile?: UserProfile;
   readonly auth0Config: Auth0Config;
+  readonly showEmailModal: boolean;
   login: (email?: string, password?: string) => Promise<string>;
   twitterLogin: () => void;
   facebookLogin: () => void;
   logout: () => void;
+  refreshHandler: (email: string) => void;
   signup: (email?: string, password?: string) => Promise<string>;
-};
+}
 
-export interface CustomLoginUiState{
+export interface CustomLoginUiState {
   email: string;
   password: string;
   errorMessage: string;
   shouldDisplayLoginModal: boolean;
   userMenuHidden: boolean;
-  
-};
+  currentEmail: string;
+  emailIsValid?: boolean;
+  emailOptIn: boolean;
+}
 
 export class CustomLoginUi extends React.Component<CustomLoginUiProps, CustomLoginUiState> {
-
   constructor(props: CustomLoginUiProps) {
     super(props);
+
     this.state = {
       email: '',
       password: '',
       errorMessage: '',
       shouldDisplayLoginModal: false,
       userMenuHidden: true,
-    }
+      currentEmail: '',
+      emailIsValid: undefined,
+      emailOptIn: true,
+    };
   }
 
   toggleMenu = (): void => {
@@ -108,6 +118,29 @@ export class CustomLoginUi extends React.Component<CustomLoginUiProps, CustomLog
   logout = (): void => {
     this.props.logout();
     this.toggleMenu();
+  }
+
+  changeEmailOpt = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ emailOptIn: !this.state.emailOptIn });
+  }
+
+  changeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ currentEmail: e.currentTarget.value });
+  }
+
+  formsubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    this.submitEmail();
+  }
+
+  submitEmail = () => {
+    if (EmailValidator.validate(this.state.currentEmail)) {
+      this.setState({emailIsValid: true});
+
+      this.props.refreshHandler(this.state.currentEmail);
+    } else {
+      this.setState({emailIsValid: false});
+    }
   }
 
   showLoginModal = () => {
@@ -193,7 +226,6 @@ export class CustomLoginUi extends React.Component<CustomLoginUiProps, CustomLog
               <a className="button-cancel" onClick={this.toggleModal}>Cancel</a>
             </div>
           </div>
-          {/* </form> */}
         </div>
         </span>
       );
@@ -202,7 +234,53 @@ export class CustomLoginUi extends React.Component<CustomLoginUiProps, CustomLog
     }
   }
 
-  loginButtonMarkup = () => {
+  emailTextOrError = (): String => {
+    if (this.state.emailIsValid === undefined || this.state.emailIsValid === true) {
+      return 'We never share your email without your permission';
+    }
+
+    return 'Please enter a valid email';
+  }
+
+  emailModalMarkup = () => {
+    if (this.props.showEmailModal) {
+      return (
+        <span>
+        <div className="login-modal-mask">&nbsp;</div>
+        <div className="login-modal email">
+          <h2>Enter your email to finish signing up:</h2>
+          <p>{this.emailTextOrError()}</p>
+          <form onSubmit={this.formsubmit}>
+            <input
+              type="email"
+              name="email"
+              placeholder="example@gmail.com"
+              onChange={this.changeEmail}
+              required={true}
+            />
+            <label>
+              <input type="checkbox" checked={this.state.emailOptIn} onChange={this.changeEmailOpt} />
+              <p>Send me high-priority calls once a week</p>
+            </label>
+            <div className="btn-block">
+              <button
+                type="button"
+                className="btn-send"
+                onClick={this.submitEmail}
+              >
+                OK
+              </button>
+            </div>
+          </form>
+        </div>
+        </span>
+      );
+    } else {
+      return <span />
+    }
+  }
+
+  loginUIMarkup = () => {
     return (
       <span>
         <div className="userHeader">
@@ -218,7 +296,7 @@ export class CustomLoginUi extends React.Component<CustomLoginUiProps, CustomLog
           <div className="userHeader__menu">
             <ul>
               {this.props.auth0Config.popupAuth
-              ? <span></span> /* <li><a href={`${this.props.auth0Config.poweredURL}/impact`} target="_blank">My Impact</a></li> */
+              ? <span></span>
               : <li><Link to="/profile">My Profile</Link></li>
               }
               <li className="line"/>
@@ -228,13 +306,14 @@ export class CustomLoginUi extends React.Component<CustomLoginUiProps, CustomLog
           }
         </div>
         {this.loginModalMarkup()}
+        {this.emailModalMarkup()}
       </span>
     );
   }
 
   render() {
     return (
-      this.loginButtonMarkup()
+      this.loginUIMarkup()
     )
   }
 }

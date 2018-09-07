@@ -6,8 +6,9 @@ import { LoginService } from './LoginService';
 
 export interface CustomLoginProps {
   readonly auth0Config: Auth0Config;
-  readonly userProfile: UserProfile;
+  readonly userProfile?: UserProfile;
   logoutHandler: () => void;
+  refreshHandler: (email: string) => void;
 }
 
 export interface CustomLoginState {
@@ -41,19 +42,30 @@ export class CustomLogin extends React.Component<CustomLoginProps, CustomLoginSt
     this.props.logoutHandler();
   }
 
+  showEmail = (): boolean => {
+    let needsEmail = false;
+    if (this.props.userProfile &&
+      (this.props.userProfile['https://5calls.org/email'] === undefined ||
+       this.props.userProfile['https://5calls.org/email'] === '')) {
+        needsEmail = true;
+    }
+
+    return needsEmail;
+  }
+
   render() {
     return (
       <CustomLoginUi
         profile={this.props.userProfile}
         auth0Config={this.props.auth0Config}
+        showEmailModal={this.showEmail()}
         login={this.login}
         twitterLogin={this.twitterLogin}
         facebookLogin={this.facebookLogin}
         logout={this.logout}
         signup={this.signup}
+        refreshHandler={this.props.refreshHandler}
       />
-    )
+    );
   }
 }
-
-
