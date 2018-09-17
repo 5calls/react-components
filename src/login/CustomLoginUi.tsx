@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 
 import * as EmailValidator from 'email-validator';
+import EventEmitter = require('wolfy87-eventemitter');
 
 import { UserProfile, Auth0Config } from '../shared/model';
 
@@ -9,6 +10,7 @@ export interface CustomLoginUiProps {
   readonly profile?: UserProfile;
   readonly auth0Config: Auth0Config;
   readonly showEmailModal: boolean;
+  readonly eventEmitter: EventEmitter;
   login: (email?: string, password?: string) => Promise<string>;
   twitterLogin: () => void;
   facebookLogin: () => void;
@@ -44,11 +46,20 @@ export class CustomLoginUi extends React.Component<CustomLoginUiProps, CustomLog
     };
   }
 
+  componentDidMount() {
+    this.props.eventEmitter.addListener('showLogin', this.toggleModal);
+  }
+
+  componentWillUnmount() {
+    this.props.eventEmitter.removeListener('showLogin', this.toggleModal);
+  }
+
   toggleMenu = (): void => {
     this.setState({ userMenuHidden: !this.state.userMenuHidden });
   }
 
   toggleModal = (): void => {
+    console.log("needed login modal");
     this.setState({ shouldDisplayLoginModal: !this.state.shouldDisplayLoginModal });
   }
 

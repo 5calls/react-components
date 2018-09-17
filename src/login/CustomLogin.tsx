@@ -7,6 +7,7 @@ import { LoginService } from './LoginService';
 export interface CustomLoginProps {
   readonly auth0Config: Auth0Config;
   readonly userProfile?: UserProfile;
+  readonly eventEmitter: EventEmitter;
   logoutHandler: () => void;
   refreshHandler: (email: string, subscribe: boolean) => void;
 }
@@ -59,6 +60,7 @@ export class CustomLogin extends React.Component<CustomLoginProps, CustomLoginSt
         profile={this.props.userProfile}
         auth0Config={this.props.auth0Config}
         showEmailModal={this.showEmail()}
+        eventEmitter={this.props.eventEmitter}
         login={this.login}
         twitterLogin={this.twitterLogin}
         facebookLogin={this.facebookLogin}

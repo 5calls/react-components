@@ -157,9 +157,7 @@ export class LoginService {
     });
   }
 
-
   decodeAndSetProfile(auth0Hash: auth0base.Auth0DecodedHash): AuthResponse {
-    console.log("decoding");
     let userProfile: UserProfile | undefined;
     let authToken = '';
     if (auth0Hash.idToken) {
